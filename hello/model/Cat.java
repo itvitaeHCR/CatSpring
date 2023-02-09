@@ -1,21 +1,46 @@
 package com.les2.hello.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
 public class Cat {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String name;
     private Integer age;
 
+    @OneToOne
+    @JoinColumn(name="chip_id")
+    private Chip chip;
+
+    @OneToMany
+    @JsonManagedReference
+    private List<Kitten> kittens = new ArrayList<>();
+
+    // CONSTRUCTORS
     public Cat() {}
 
+    public Cat(String name, Integer age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    //GETTERS AND SETTERS
     public Long getId() {
         return id;
+    }
+
+    public Chip getChip() {
+        return chip;
+    }
+
+    public void setChip(Chip chip) {
+        this.chip = chip;
     }
 
     public String getName() {
@@ -34,10 +59,12 @@ public class Cat {
         this.age = age;
     }
 
-    public Cat(String name, Integer age) {
-        this.name = name;
-        this.age = age;
-
-
+    public List<Kitten> getKittens() {
+        return kittens;
     }
+
+    public void setKittens(List<Kitten> kittens) {
+        this.kittens = kittens;
+    }
+
 }
